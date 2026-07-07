@@ -184,3 +184,166 @@
     </script>
 </body>
 </html>
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FC Ultimate Team - Pack Opener</title>
+    <style>
+        body {
+            font-family: 'Arial Black', sans-serif;
+            background-color: #0c1020;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 { color: #f3a913; text-shadow: 2px 2px 4px #000; }
+        .btn {
+            background: linear-gradient(135deg, #f3a913, #e17b07);
+            color: black;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(243, 169, 19, 0.4);
+            transition: 0.2s;
+        }
+        .btn:hover { transform: scale(1.05); }
+        #pack-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            min-height: 250px;
+        }
+        .card {
+            background: linear-gradient(135deg, #1c2445, #0d1326);
+            border: 3px solid #f3a913;
+            border-radius: 12px;
+            width: 150px;
+            padding: 15px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.6);
+            transform: translateY(50px);
+            opacity: 0;
+            animation: popIn 0.5s forwards ease-out;
+        }
+        @keyframes popIn {
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .rating { font-size: 28px; font-weight: bold; color: #f3a913; text-align: left; }
+        .name { font-size: 16px; margin: 15px 0 5px 0; font-weight: bold; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
+        .info { font-size: 12px; color: #aaa; margin-bottom: 2px; }
+        .league { font-size: 11px; color: #f3a913; font-style: italic; }
+    </style>
+</head>
+<body>
+
+    <h1>FC PACK OPENER</h1>
+    <p>Öffne ein Pack und ziehe Stars aus den Top-5 Ligen und der Süper Lig!</p>
+    
+    <button class="btn" onclick="openPack()">Pack öffnen</button>
+
+    <div id="pack-container"></div>
+
+    <script>
+        // Spieler-Datenbank nach Ligen sortiert
+        const players = [
+            // PREMIER LEAGUE (England)
+            { name: "M. Salah", rating: 91, club: "Liverpool", league: "Premier League" },
+            { name: "E. Haaland", rating: 91, club: "Man City", league: "Premier League" },
+            { name: "K. De Bruyne", rating: 90, club: "Man City", league: "Premier League" },
+            { name: "B. Saka", rating: 89, club: "Arsenal", league: "Premier League" },
+            { name: "V. van Dijk", rating: 89, club: "Liverpool", league: "Premier League" },
+            { name: "Rúben Dias", rating: 89, club: "Man City", league: "Premier League" },
+            { name: "M. Ødegaard", rating: 89, club: "Arsenal", league: "Premier League" },
+            { name: "Rodri", rating: 90, club: "Man City", league: "Premier League" },
+            { name: "B. Fernandes", rating: 87, club: "Man United", league: "Premier League" },
+            { name: "Son Heung-min", rating: 87, club: "Tottenham", league: "Premier League" },
+
+            // LA LIGA (Spanien)
+            { name: "K. Mbappé", rating: 91, club: "Real Madrid", league: "La Liga" },
+            { name: "Vini Jr.", rating: 90, club: "Real Madrid", league: "La Liga" },
+            { name: "J. Bellingham", rating: 90, club: "Real Madrid", league: "La Liga" },
+            { name: "Pedri", rating: 90, club: "FC Barcelona", league: "La Liga" },
+            { name: "R. Lewandowski", rating: 88, club: "FC Barcelona", league: "La Liga" },
+            { name: "A. Griezmann", rating: 88, club: "Atlético Madrid", league: "La Liga" },
+            { name: "F. de Jong", rating: 87, club: "FC Barcelona", league: "La Liga" },
+            { name: "F. Valverde", rating: 88, club: "Real Madrid", league: "La Liga" },
+            { name: "Lamine Yamal", rating: 86, club: "FC Barcelona", league: "La Liga" },
+
+            // BUNDESLIGA (Deutschland)
+            { name: "H. Kane", rating: 90, club: "Bayern München", league: "Bundesliga" },
+            { name: "J. Musiala", rating: 88, club: "Bayern München", league: "Bundesliga" },
+            { name: "F. Wirtz", rating: 88, club: "Bayer Leverkusen", league: "Bundesliga" },
+            { name: "S. Guirassy", rating: 87, club: "Borus. Dortmund", league: "Bundesliga" },
+            { name: "J. Tah", rating: 87, club: "Bayer Leverkusen", league: "Bundesliga" },
+            { name: "M. Olise", rating: 86, club: "Bayern München", league: "Bundesliga" },
+            { name: "G. Xhaka", rating: 86, club: "Bayer Leverkusen", league: "Bundesliga" },
+            { name: "J. Brandt", rating: 85, club: "Borus. Dortmund", league: "Bundesliga" },
+            { name: "Gregor Kobel", rating: 88, club: "Borus. Dortmund", league: "Bundesliga" },
+
+            // SERIE A (Italien)
+            { name: "Lautaro Martínez", rating: 89, club: "Inter Mailand", league: "Serie A" },
+            { name: "Rafael Leão", rating: 87, club: "AC Mailand", league: "Serie A" },
+            { name: "K. Kvaratskhelia", rating: 86, club: "SSC Neapel", league: "Serie A" },
+            { name: "P. Dybala", rating: 86, club: "AS Rom", league: "Serie A" },
+            { name: "H. Çalhanoğlu", rating: 86, club: "Inter Mailand", league: "Serie A" },
+            { name: "N. Barella", rating: 86, club: "Inter Mailand", league: "Serie A" },
+            { name: "D. Vlahović", rating: 85, club: "Juventus Turin", league: "Serie A" },
+            { name: "Theo Hernández", rating: 87, club: "AC Mailand", league: "Serie A" },
+
+            // LIGUE 1 (Frankreich)
+            { name: "O. Dembélé", rating: 90, club: "Paris SG", league: "Ligue 1" },
+            { name: "Vitinha", rating: 90, club: "Paris SG", league: "Ligue 1" },
+            { name: "Marquinhos", rating: 87, club: "Paris SG", league: "Ligue 1" },
+            { name: "A. Hakimi", rating: 85, club: "Paris SG", league: "Ligue 1" },
+            { name: "J. Neves", rating: 84, club: "Paris SG", league: "Ligue 1" },
+            { name: "Jonathan David", rating: 83, club: "LOSC Lille", league: "Ligue 1" },
+            { name: "A. Lacazette", rating: 82, club: "Olymp. Lyon", league: "Ligue 1" },
+
+            // SÜPER LİG (Türkei)
+            { name: "Victor Osimhen", rating: 88, club: "Galatasaray", league: "Süper Lig" },
+            { name: "Mauro Icardi", rating: 83, club: "Galatasaray", league: "Süper Lig" },
+            { name: "Fred", rating: 82, club: "Fenerbahçe", league: "Süper Lig" },
+            { name: "D. Tadić", rating: 82, club: "Fenerbahçe", league: "Süper Lig" },
+            { name: "Y. En-Nesyri", rating: 82, club: "Fenerbahçe", league: "Süper Lig" },
+            { name: "Rafa Silva", rating: 82, club: "Beşiktaş", league: "Süper Lig" },
+            { name: "Ciro Immobile", rating: 82, club: "Beşiktaş", league: "Süper Lig" },
+            { name: "H. Ziyech", rating: 81, club: "Galatasaray", league: "Süper Lig" },
+            { name: "Edin Džeko", rating: 80, club: "Fenerbahçe", league: "Süper Lig" },
+            { name: "Barış Alper Yılmaz", rating: 79, club: "Galatasaray", league: "Süper Lig" },
+            { name: "Semih Kılıçsoy", rating: 76, club: "Beşiktaş", league: "Süper Lig" }
+        ];
+
+        function openPack() {
+            const container = document.getElementById("pack-container");
+            container.innerHTML = ""; // Altes Pack leeren
+
+            // 5 zufällige Spieler ziehen
+            for (let i = 0; i < 5; i++) {
+                const randomIndex = Math.floor(Math.random() * players.length);
+                const player = players[randomIndex];
+
+                // Karte erstellen
+                const card = document.createElement("div");
+                card.className = "card";
+                card.style.animationDelay = `${i * 0.15}s`; // cooler Nacheinander-Effekt
+
+                card.innerHTML = `
+                    <div class="rating">${player.rating}</div>
+                    <div class="name">${player.name}</div>
+                    <div class="info">${player.club}</div>
+                    <div class="league">${player.league}</div>
+                `;
+
+                container.appendChild(card);
+            }
+        }
+    </script>
+</body>
+</html>
