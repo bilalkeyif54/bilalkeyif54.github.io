@@ -518,3 +518,144 @@
             // LA LIGA
             { name: "K. Mbappé", rating: 91, club: "Real Madrid", league: "La Liga", pos: "ST", emoji: "🐢" },
 { name: "Vini Jr.", rating: 90, club: "Real Madrid", league: "La Liga", pos: "LW", emoji: "🕺" },{ name: "J. Bellingham", rating: 90, club: "Real Madrid", league: "La Liga", pos: "CM", emoji: "🦅" },{ name: "Lamine Yamal", rating: 86, club: "FC Barcelona", league: "La Liga", pos: "RW", emoji: "💎" },// BUNDESLIGA{ name: "H. Kane", rating: 90, club: "Bayern München", league: "Bundesliga", pos: "ST", emoji: "⚽" },{ name: "J. Musiala", rating: 88, club: "Bayern München", league: "Bundesliga", pos: "LCM", emoji: "🪄" },{ name: "F. Wirtz", rating: 88, club: "Bayer Leverkusen", league: "Bundesliga", pos: "RCM", emoji: "🔥" },{ name: "Gregor Kobel", rating: 88, club: "Borus. Dortmund", league: "Bundesliga", pos: "GK", emoji: "🧤" },// SERIE A{ name: "Lautaro Martínez", rating: 89, club: "Inter Mailand", league: "Serie A", pos: "ST", emoji: "🐂" },{ name: "Rafael Leão", rating: 87, club: "AC Mailand", league: "Serie A", pos: "LW", emoji: "🏄" },{ name: "H. Çalhanoğlu", rating: 86, club: "Inter Mailand", league: "Serie A", pos: "CM", emoji: "🎯" },{ name: "Theo Hernández", rating: 87, club: "AC Mailand", league: "Serie A", pos: "LB", emoji: "🚄" },// LIGUE 1{ name: "O. Dembélé", rating: 90, club: "Paris SG", league: "Ligue 1", pos: "RW", emoji: "⚡" },{ name: "Marquinhos", rating: 87, club: "Paris SG", league: "Ligue 1", pos: "RCB", emoji: "🛡️" },// SÜPER LİG{ name: "Victor Osimhen", rating: 88, club: "Galatasaray", league: "Süper Lig", pos: "ST", emoji: "🎭" },{ name: "Mauro Icardi", rating: 83, club: "Galatasaray", league: "Süper Lig", pos: "ST", emoji: "🦁" },{ name: "Fred", rating: 82, club: "Fenerbahçe", league: "Süper Lig", pos: "CM", emoji: "🏃" },{ name: "D. Tadić", rating: 82, club: "Fenerbahçe", league: "Süper Lig", pos: "LW", emoji: "🍷" },{ name: "Rafa Silva", rating: 82, club: "Beşiktaş", league: "Süper Lig", pos: "CM", emoji: "🦅" },{ name: "Ciro Immobile", rating: 82, club: "Beşiktaş", league: "Süper Lig", pos: "ST", emoji: "🏹" },{ name: "Barış Alper Yılmaz", rating: 79, club: "Galatasaray", league: "Süper Lig", pos: "RB", emoji: "💪" }];let currentlySelectedPlayer = null;function triggerPackAnimation() {const pack = document.getElementById("pack");const container = document.getElementById("pack-container");container.innerHTML = ""; // Altes Pack löschenpack.style.display = "flex"; // Pack zurückholenpack.className = "fc-pack pack-open-anim"; // Animation startensetTimeout(() => {pack.style.display = "none"; // Pack verschwindet nach ExplosionopenPack();}, 1200);}function openPack() {const container = document.getElementById("pack-container");for (let i = 0; i < 5; i++) {const randomIndex = Math.floor(Math.random() * players.length);const p = players[randomIndex];const cardType = p.rating >= 85 ? "gold-card" : "silver-card";const card = document.createElement("div");card.className = fc-card ${cardType};card.style.animationDelay = ${i * 0.2}s;card.innerHTML = <div class="card-top"> <div class="card-rating">${p.rating}</div> <div class="card-pos">${p.pos}</div> </div> <div class="card-badge"></div> <div class="card-face">${p.emoji}</div> <div class="card-name">${p.name}</div> <div class="card-club">${p.club}</div> <div class="card-league">${p.league}</div>;// Klick-Event um Spieler für das Spielfeld auszuwählencard.onclick = (e) => {e.stopPropagation();document.querySelectorAll('.fc-card').forEach(c => c.style.boxShadow = "0 8px 20px rgba(0,0,0,0.7)");card.style.boxShadow = "0 0 20px #fff, 0 0 30px #f5c423";currentlySelectedPlayer = p;};container.appendChild(card);}}function placeSelectedPlayer(positionClass) {if (!currentlySelectedPlayer) {alert("Zieh zuerst ein Pack und klicke auf eine gezogene Karte, um sie auszuwählen!");return;}const targetPos = document.querySelector(.pos-${positionClass.toLowerCase()});const cardType = currentlySelectedPlayer.rating >= 85 ? "gold-card" : "silver-card";targetPos.innerHTML = <div class="fc-card ${cardType}"> <div class="card-top"> <div class="card-rating">${currentlySelectedPlayer.rating}</div> </div> <div class="card-face">${currentlySelectedPlayer.emoji}</div> <div class="card-name">${currentlySelectedPlayer.name}</div> </div>;// Auswahl zurücksetzencurrentlySelectedPlayer = null;}
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EA FC 26 - Pack Opener & Squad Builder</title>
+    <style>
+        body {
+            font-family: 'Arial Black', sans-serif;
+            background-color: #0b0e14;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        h1 { color: #f5c423; text-shadow: 2px 2px 5px #000; letter-spacing: 2px; font-size: 26px; margin-bottom: 5px; }
+        
+        /* COIN SYSTEM & MINI GAME */
+        .stats-bar { font-size: 20px; color: #f5c423; margin-bottom: 15px; background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; display: inline-block; }
+        #game-area { width: 100%; max-width: 560px; height: 120px; background: #1a2238; border: 2px dashed #f5c423; margin: 0 auto 20px auto; position: relative; border-radius: 8px; overflow: hidden; }
+        #target { width: 50px; height: 50px; background: radial-gradient(circle, #ff4d4d 40%, #ffffff 41%, #ffffff 70%, #ff4d4d 71%); border-radius: 50%; position: absolute; top: 35px; left: 0; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 0 10px #ff4d4d; }
+        
+        .btn {
+            background: linear-gradient(135deg, #f5c423, #b8860b);
+            color: black; border: none; padding: 12px 30px;
+            font-size: 16px; font-weight: bold; cursor: pointer;
+            border-radius: 4px; box-shadow: 0 0 15px rgba(245, 196, 35, 0.4);
+            transition: 0.2s; text-transform: uppercase;
+        }
+        .btn:hover { transform: scale(1.05); }
+        .btn:disabled { background: #555; color: #aaa; box-shadow: none; cursor: not-allowed; }
+        
+        /* PACK ANIMATION */
+        #stage { display: flex; justify-content: center; align-items: center; margin-top: 20px; min-height: 260px; position: relative; }
+        .fc-pack { width: 150px; height: 220px; background: linear-gradient(135deg, #1a2238, #0a0d1a); border: 3px solid #f5c423; border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; position: absolute; }
+        .fc-pack-logo { font-size: 28px; font-weight: bold; color: #f5c423; text-shadow: 0 0 10px #f5c423; }
+        .pack-open-anim { animation: openPackEffect 1.2s forwards ease-in-out; }
+        @keyframes openPackEffect {
+            0% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.2) rotate(-5deg); filter: brightness(2); }
+            100% { transform: scale(0); opacity: 0; }
+        }
+
+        #pack-container { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; width: 100%; }
+
+        /* EA FC CARD DESIGN */
+        .fc-card {
+            width: 140px; height: 210px; position: relative;
+            clip-path: polygon(18% 0%, 82% 0%, 100% 12%, 100% 85%, 50% 100%, 0% 85%, 0% 12%);
+            box-shadow: 0 6px 15px rgba(0,0,0,0.7); color: black; text-align: center; cursor: pointer;
+            transform: scale(0); animation: cardPop 0.4s forwards ease-out;
+        }
+        @keyframes cardPop { to { transform: scale(1); } }
+        .gold-card { background: linear-gradient(135deg, #ffe066 0%, #f5c423 50%, #b8860b 100%); border: 1px solid #fff; }
+        .silver-card { background: linear-gradient(135deg, #e0e0e0 0%, #b0b0b0 50%, #707070 100%); border: 1px solid #fff; }
+        
+        .card-top { position: absolute; top: 15px; left: 12px; text-align: left; line-height: 1.1; }
+        .card-rating { font-size: 24px; font-weight: 900; margin: 0; }
+        .card-pos { font-size: 11px; font-weight: bold; opacity: 0.8; }
+        .card-face { width: 80px; height: 80px; background: rgba(255,255,255,0.2); border-radius: 50%; margin: 35px auto 0 auto; display: flex; align-items: center; justify-content: center; font-size: 32px; }
+        .card-name { font-size: 13px; font-weight: bold; margin: 8px 0 2px 0; text-transform: uppercase; padding: 0 5px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .card-club { font-size: 10px; opacity: 0.7; }
+        .card-league { font-size: 9px; font-weight: bold; color: #111; font-style: italic; }
+
+        /* SQUAD BUILDER */
+        #pitch { width: 100%; max-width: 560px; height: 620px; background-color: #2e6f40; border: 4px solid white; margin: 20px auto; border-radius: 12px; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        #pitch::before { content: ''; position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: white; }
+        
+        .pitch-pos { position: absolute; width: 80px; height: 105px; border: 2px dashed rgba(255,255,255,0.4); border-radius: 6px; transform: translate(-50%, -50%); display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; }
+        .pos-label { font-size: 11px; font-weight: bold; background: rgba(0,0,0,0.7); padding: 2px 5px; border-radius: 4px; color: #f5c423; }
+        
+        .pos-lw  { top: 15%; left: 20%; } .pos-st  { top: 10%; left: 50%; } .pos-rw  { top: 15%; left: 80%; }
+        .pos-lcm { top: 42%; left: 25%; } .pos-cm  { top: 46%; left: 50%; } .pos-rcm { top: 42%; left: 75%; }
+        .pos-lb  { top: 70%; left: 15%; } .pos-lcb { top: 73%; left: 38%; } .pos-rcb { top: 73%; left: 62%; } .pos-rb  { top: 70%; left: 85%; }
+        .pos-gk  { top: 90%; left: 50%; }
+
+        .pitch-pos .fc-card { width: 100%; height: 100%; top: 0; left: 0; position: absolute; }
+        .pitch-pos .card-rating { font-size: 15px; } .pitch-pos .card-top { top: 5px; left: 5px; }
+        .pitch-pos .card-face { width: 40px; height: 40px; margin: 15px auto 0 auto; font-size: 18px; }
+        .pitch-pos .card-name { font-size: 9px; margin: 3px 0 0 0; }
+        .pitch-pos .card-club, .pitch-pos .card-league, .pitch-pos .card-pos { display: none; }
+    </style>
+</head>
+<body>
+
+    <h1>EA SPORTS FC 26 Ultimate Team</h1>
+    
+    <div class="stats-bar">🪙 Münzen: <span id="coin-count">0</span> / 50 für ein Pack</div>
+
+    <p style="font-size:13px; color:#aaa; margin:0 0 5px 0;">⚽ Klicke auf das sich bewegende Ziel, um Tore zu schießen und Münzen zu verdienen!</p>
+    <div id="game-area">
+        <div id="target" onclick="shootGoal()">⚽</div>
+    </div>
+
+    <button id="pack-btn" class="btn" onclick="triggerPackAnimation()" disabled>Pack öffnen (50 🪙)</button>
+
+    <div id="stage">
+        <div id="pack" class="fc-pack" style="display:none;">
+            <div class="fc-pack-logo">FC 26</div>
+            <div style="font-size:11px; margin-top:5px; color:#aaa;">GOLD PACK</div>
+        </div>
+        <div id="pack-container"></div>
+    </div>
+
+    <h2>Dein Spielfeld (4-3-3)</h2>
+    <div id="pitch">
+        <div class="pitch-pos pos-lw" onclick="placeSelectedPlayer('LW')"><span class="pos-label">LF</span></div>
+        <div class="pitch-pos pos-st" onclick="placeSelectedPlayer('ST')"><span class="pos-label">ST</span></div>
+        <div class="pitch-pos pos-rw" onclick="placeSelectedPlayer('RW')"><span class="pos-label">RF</span></div>
+        <div class="pitch-pos pos-lcm" onclick="placeSelectedPlayer('LCM')"><span class="pos-label">ZM</span></div>
+        <div class="pitch-pos pos-cm" onclick="placeSelectedPlayer('CM')"><span class="pos-label">ZM</span></div>
+        <div class="pitch-pos pos-rcm" onclick="placeSelectedPlayer('RCM')"><span class="pos-label">ZM</span></div>
+        <div class="pitch-pos pos-lb" onclick="placeSelectedPlayer('LB')"><span class="pos-label">LV</span></div>
+        <div class="pitch-pos pos-lcb" onclick="placeSelectedPlayer('LCB')"><span class="pos-label">IV</span></div>
+        <div class="pitch-pos pos-rcb" onclick="placeSelectedPlayer('RCB')"><span class="pos-label">IV</span></div>
+        <div class="pitch-pos pos-rb" onclick="placeSelectedPlayer('RB')"><span class="pos-label">RV</span></div>
+        <div class="pitch-pos pos-gk" onclick="placeSelectedPlayer('GK')"><span class="pos-label">TW</span></div>
+    </div>
+
+    <script>
+        // Datenbank getrennt nach Rarität (Top-Stars = 10% Chance)
+        const topStars = [
+            { name: "K. Mbappé", rating: 91, club: "Real Madrid", league: "La Liga", pos: "ST", emoji: "🐢" },
+            { name: "E. Haaland", rating: 91, club: "Man City", league: "Premier League", pos: "ST", emoji: "🤖" },
+            { name: "M. Salah", rating: 91, club: "Liverpool", league: "Premier League", pos: "RW", emoji: "👑" },
+            { name: "Vini Jr.", rating: 90, club: "Real Madrid", league: "La Liga", pos: "LW", emoji: "🕺" },
+            { name: "J. Bellingham", rating: 90, club: "Real Madrid", league: "La Liga", pos: "CM", emoji: "🦅" },
+            { name: "K. De Bruyne", rating: 90, club: "Man City", league: "Premier League", pos: "CM", emoji: "🎯" },
+            { name: "H. Kane", rating: 90, club: "Bayern München", league: "Bundesliga", pos: "ST", emoji: "⚽" },
+            { name: "Rodri", rating: 90, club: "Man City", league: "Premier League", pos: "CM", emoji: "🕹️" },
+            { name: "O. Dembélé", rating: 90, club: "Paris SG", league: "Ligue 1", pos: "RW", emoji: "⚡" }
+        ];
+
+        const regularPlayers = [
+            { name: "B. Saka", rating: 89, club: "Arsenal", league: "Premier League", pos: "RW", emoji: "🌶️" },
+            { name: "V. van Dijk", rating: 89, club: "Liverpool", league: "Premier League", pos: "LCB", emoji: "🧱" },
+            { name: "Lautaro Martínez", rating: 89, club: "Inter Mailand", league: "Serie A", pos: "ST", emoji: "🐂" },
+            { name: "J. Musiala", rating: 88, club: "Bayern München", league: "Bundesliga", pos: "LCM", emoji: "🪄" },
+            { name: "F. Wirtz", rating: 88, club: "Bayer Leverkusen", league: "Bundesliga", pos: "RCM", emoji: "🔥" },
+Verwende Code mit Vorsicht.{ name: "Gregor Kobel", rating: 88, club: "Borus. Dortmund", league: "Bundesliga", pos: "GK", emoji: "🧤" },{ name: "Victor Osimhen", rating: 88, club: "Galatasaray", league: "Süper Lig", pos: "ST", emoji: "🎭" },{ name: "Son Heung-min", rating: 87, club: "Tottenham", league: "Premier League", pos: "LW", emoji: "⚡" },{ name: "Rafael Leão", rating: 87, club: "AC Mailand", league: "Serie A", pos: "LW", emoji: "🏄" },{ name: "Marquinhos", rating: 87, club: "Paris SG", league: "Ligue 1", pos: "RCB", emoji: "🛡️" },{ name: "Theo Hernández", rating: 87, club: "AC Mailand", league: "Serie A", pos: "LB", emoji: "🚄" },{ name: "Lamine Yamal", rating: 86, club: "FC Barcelona", league: "La Liga", pos: "RW", emoji: "💎" },{ name: "H. Çalhanoğlu", rating: 86, club: "Inter Mailand", league: "Serie A", pos: "CM", emoji: "🎯" },{ name: "Mauro Icardi", rating: 83, club: "Galatasaray", league: "Süper Lig", pos: "ST", emoji: "🦁" },{ name: "Fred", rating: 82, club: "Fenerbahçe", league: "Süper Lig", pos: "CM", emoji: "🏃" },{ name: "D. Tadić", rating: 82, club: "Fenerbahçe", league: "Süper Lig", pos: "LW", emoji: "🍷" },{ name: "Rafa Silva", rating: 82, club: "Beşiktaş", league: "Süper Lig", pos: "CM", emoji: "🦅" },{ name: "Ciro Immobile", rating: 82, club: "Beşiktaş", league: "Süper Lig", pos: "ST", emoji: "🏹" },{ name: "Barış Alper Yılmaz", rating: 79, club: "Galatasaray", league: "Süper Lig", pos: "RB", emoji: "💪" }];let coins = 0;let currentlySelectedPlayer = null;let targetX = 0;let targetSpeed = 3;// Mini-Spiel Animation (Ziel fliegt hin und her)setInterval(() => {const gameArea = document.getElementById("game-area");const target = document.getElementById("target");targetX += targetSpeed;if (targetX > gameArea.offsetWidth - 50 || targetX < 0) {targetSpeed = -targetSpeed;}target.style.left = targetX + "px";}, 20);function shootGoal() {const reward = Math.floor(Math.random() * 16) + 10; // 10-25 Münzencoins += reward;document.getElementById("coin-count").innerText = coins;// Button prüfenif (coins >= 50) {document.getElementById("pack-btn").disabled = false;}// Treffer-Animation-Effektconst target = document.getElementById("target");target.style.transform = "scale(1.3)";setTimeout(() => target.style.transform = "scale(1)", 150);}function triggerPackAnimation() {if (coins < 50) return;coins -= 50;document.getElementById("coin-count").innerText = coins;if (coins < 50) document.getElementById("pack-btn").disabled = true;const pack = document.getElementById("pack");const container = document.getElementById("pack-container");container.innerHTML = "";pack.style.display = "flex";pack.className = "fc-pack pack-open-anim";setTimeout(() => {pack.style.display = "none";openPack();}, 1200);}function openPack() {const container = document.getElementById("pack-container");// Zieht genau 5 Spielerfor (let i = 0; i < 5; i++) {let p;// 10% Chance für einen Top-Star, sonst normaler Spielerif (Math.random() < 0.10) {p = topStars[Math.floor(Math.random() * topStars.length)];} else {p = regularPlayers[Math.floor(Math.random() * regularPlayers.length)];}const cardType = p.rating >= 85 ? "gold-card" : "silver-card";const card = document.createElement("div");card.className = fc-card ${cardType};card.style.animationDelay = ${i * 0.15}s;card.innerHTML = <div class="card-top"> <div class="card-rating">${p.rating}</div> <div class="card-pos">${p.pos}</div> </div> <div class="card-face">${p.emoji}</div> <div class="card-name">${p.name}</div> <div class="card-club">${p.club}</div> <div class="card-league">${p.league}</div>;card.onclick = (e) => {e.stopPropagation();document.querySelectorAll('.fc-card').forEach(c => c.style.boxShadow = "0 6px 15px rgba(0,0,0,0.7)");card.style.boxShadow = "0 0 15px #fff, 0 0 25px #f5c423";currentlySelectedPlayer = p;};container.appendChild(card);}}function placeSelectedPlayer(positionClass) {if (!currentlySelectedPlayer) {alert("Verdiene Münzen, öffne ein Pack und wähle eine Karte aus!");return;}const targetPos = document.querySelector(.pos-${positionClass.toLowerCase()});const cardType = currentlySelectedPlayer.rating >= 85 ? "gold-card" : "silver-card";targetPos.innerHTML = <div class="fc-card ${cardType}"> <div class="card-top"><div class="card-rating">${currentlySelectedPlayer.rating}</div></div> <div class="card-face">${currentlySelectedPlayer.emoji}</div> <div class="card-name">${currentlySelectedPlayer.name}</div> </div>;currentlySelectedPlayer = null;}
